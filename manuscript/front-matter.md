@@ -10,7 +10,7 @@
 
 ## Copyright
 
-Copyright © 2026 Matt Jhagen
+Copyright © 2026 Matthew James Hagen
 
 All rights reserved. No part of this publication may be reproduced, distributed, or transmitted in any form or by any means without the prior written permission of the publisher.
 

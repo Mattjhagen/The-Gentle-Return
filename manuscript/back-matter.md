@@ -17,7 +17,9 @@ The author wishes to thank the following:
 
 ## About the Author
 
-Matt Jhagen is a writer, technologist, and recovering productivity enthusiast. He lives in the Pacific Northwest, where he tends a small garden, reads too many books, and occasionally wonders whether his smart home is smarter than he is.
+Matthew James Hagen is a founder, developer, and builder from North Dakota, now living in Omaha, Nebraska. A self-taught technologist, he builds across fintech, AI, mobile apps, and privacy tools — driven by a belief that technology should give people more control, not less. His faith in Jesus Christ shapes everything he builds. When he's not writing code or novels, he's rescuing old servers, exploring local AI, and chasing ideas that won't leave him alone.
+
+*"Whatever you do, work at it with all your heart."* — Colossians 3:23
 
 *The Gentle Conquest* and *The Gentle Return* are his first novels.
 
