@@ -4,6 +4,8 @@
 
 **The Gentle Return**
 
+*The Return Begins where the Comfort Ends*
+
 *A Novel*
 
 ---
