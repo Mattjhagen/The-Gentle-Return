@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """
-Build Camera-Ready KDP Paperback & Hardcover PDF (6x9) for The Gentle Return
-Adheres strictly to Amazon KDP interior specifications (G202145060)
-Guarantees compliant gutter (>0.625\") and safety margins (>0.375\") on all pages.
+Build Camera-Ready KDP Print PDF (6x9) for The Gentle Return
+100% Embedded TrueType Fonts (Georgia) & Strict KDP Margin/Gutter Compliance
 """
 
 import os
@@ -16,6 +15,10 @@ from reportlab.platypus import (
     BaseDocTemplate, PageTemplate, Frame, Paragraph, Spacer, PageBreak, KeepTogether, HRFlowable
 )
 from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+import reportlab.rl_config
+reportlab.rl_config.canvas_base_font = "Georgia"
 
 PROJECT_DIR = Path(__file__).parent.parent
 MANUSCRIPT_DIR = PROJECT_DIR / "manuscript"
@@ -23,22 +26,36 @@ CHAPTERS_DIR = MANUSCRIPT_DIR / "chapters"
 OUTPUT_DIR = PROJECT_DIR / "build" / "output"
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
+# Register 100% Embedded TrueType Fonts (Resolves KDP font embedding error)
+FONT_DIR = "/System/Library/Fonts/Supplemental"
+pdfmetrics.registerFont(TTFont("Georgia", f"{FONT_DIR}/Georgia.ttf"))
+pdfmetrics.registerFont(TTFont("Georgia-Bold", f"{FONT_DIR}/Georgia Bold.ttf"))
+pdfmetrics.registerFont(TTFont("Georgia-Italic", f"{FONT_DIR}/Georgia Italic.ttf"))
+pdfmetrics.registerFont(TTFont("Georgia-BoldItalic", f"{FONT_DIR}/Georgia Bold Italic.ttf"))
+
+pdfmetrics.registerFontFamily(
+    "Georgia",
+    normal="Georgia",
+    bold="Georgia-Bold",
+    italic="Georgia-Italic",
+    boldItalic="Georgia-BoldItalic"
+)
+
 # 6x9 inch page dimensions
 PAGE_WIDTH = 6.0 * inch
 PAGE_HEIGHT = 9.0 * inch
 
-# Margins strictly conforming to KDP specifications for 300+ pages
-# Gutter requirement >= 0.625\", Outside >= 0.250\", Top/Bottom >= 0.375\" for headers/footers
-MARGIN_LEFT = 0.80 * inch    # 20.3 mm (exceeds 15.875 mm gutter rule)
-MARGIN_RIGHT = 0.80 * inch   # 20.3 mm (exceeds 6.35 mm outside rule)
-MARGIN_TOP = 0.875 * inch    # 22.2 mm (leaves safe zone for running headers)
-MARGIN_BOTTOM = 0.875 * inch # 22.2 mm (leaves safe zone for page numbers)
+# Strict KDP Margins (Guarantees gutter >= 0.625\" and outside/top/bottom >= 0.250\" on ALL pages)
+MARGIN_LEFT = 0.85 * inch    # 21.59 mm (well exceeds 15.875 mm gutter)
+MARGIN_RIGHT = 0.85 * inch   # 21.59 mm (well exceeds 6.35 mm outside)
+MARGIN_TOP = 0.875 * inch    # 22.2 mm (safe top margin)
+MARGIN_BOTTOM = 0.875 * inch # 22.2 mm (safe bottom margin)
 
-USABLE_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT # 4.40 inch
+USABLE_WIDTH = PAGE_WIDTH - MARGIN_LEFT - MARGIN_RIGHT # 4.30 inch
 USABLE_HEIGHT = PAGE_HEIGHT - MARGIN_TOP - MARGIN_BOTTOM # 7.25 inch
 
 
-class KDPBookCanvas(canvas.Canvas):
+class EmbeddedKDPCanvas(canvas.Canvas):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._saved_page_states = []
@@ -69,9 +86,9 @@ class KDPBookCanvas(canvas.Canvas):
         footer_y = 0.52 * inch                # 0.52 in from bottom (safe zone is 0.375 to 0.875)
         center_x = PAGE_WIDTH / 2.0
 
-        # Running header (small caps / italic)
+        # Running header with embedded Georgia-Italic
         self.saveState()
-        self.setFont("Times-Italic", 8.5)
+        self.setFont("Georgia-Italic", 8.0)
         self.setFillColorRGB(0.25, 0.25, 0.25)
         
         if is_odd:
@@ -79,9 +96,9 @@ class KDPBookCanvas(canvas.Canvas):
         else:
             self.drawCentredString(center_x, header_y, "MATTHEW JAMES HAGEN")
         
-        # Bottom page number
-        self.setFont("Times-Roman", 9.5)
-        self.setFillColorRGB(0.1, 0.1, 0.1)
+        # Bottom page number with embedded Georgia
+        self.setFont("Georgia", 9.0)
+        self.setFillColorRGB(0.15, 0.15, 0.15)
         self.drawCentredString(center_x, footer_y, str(page_num))
         self.restoreState()
 
@@ -137,7 +154,7 @@ def parse_markdown(text, styles):
             else:
                 flowables.append(Paragraph(h_text, styles["MajorHeading"]))
             
-            flowables.append(Spacer(1, 22))
+            flowables.append(Spacer(1, 20))
             first_p = True
             i += 1
             continue
@@ -208,7 +225,7 @@ def parse_markdown(text, styles):
 
 def build_pdf():
     pdf_path = OUTPUT_DIR / "the-gentle-return-print-6x9.pdf"
-    print(f"Building KDP 6x9 Print PDF: {pdf_path}")
+    print(f"Building KDP 6x9 Print PDF with 100% Embedded TrueType Fonts: {pdf_path}")
 
     doc = BaseDocTemplate(
         str(pdf_path),
@@ -229,22 +246,24 @@ def build_pdf():
     ])
 
     styles = getSampleStyleSheet()
+    for s in styles.byName.values():
+        s.fontName = "Georgia"
 
     styles.add(ParagraphStyle(
         "BodyIndent",
-        fontName="Times-Roman",
-        fontSize=10.5,
-        leading=14.5,
+        fontName="Georgia",
+        fontSize=10.0,
+        leading=14.0,
         alignment=TA_JUSTIFY,
-        firstLineIndent=18,
+        firstLineIndent=16,
         spaceBefore=0,
         spaceAfter=0
     ))
     styles.add(ParagraphStyle(
         "BodyFirst",
-        fontName="Times-Roman",
-        fontSize=10.5,
-        leading=14.5,
+        fontName="Georgia",
+        fontSize=10.0,
+        leading=14.0,
         alignment=TA_JUSTIFY,
         firstLineIndent=0,
         spaceBefore=0,
@@ -252,47 +271,47 @@ def build_pdf():
     ))
     styles.add(ParagraphStyle(
         "ChapterLabel",
-        fontName="Times-Roman",
-        fontSize=11,
-        leading=15,
+        fontName="Georgia",
+        fontSize=10.5,
+        leading=14,
         alignment=TA_CENTER,
         textColor="#444444"
     ))
     styles.add(ParagraphStyle(
         "ChapterTitle",
-        fontName="Times-Bold",
-        fontSize=18,
-        leading=22,
-        alignment=TA_CENTER,
-        textColor="#111111"
-    ))
-    styles.add(ParagraphStyle(
-        "MajorHeading",
-        fontName="Times-Bold",
+        fontName="Georgia-Bold",
         fontSize=17,
         leading=21,
         alignment=TA_CENTER,
         textColor="#111111"
     ))
     styles.add(ParagraphStyle(
+        "MajorHeading",
+        fontName="Georgia-Bold",
+        fontSize=16,
+        leading=20,
+        alignment=TA_CENTER,
+        textColor="#111111"
+    ))
+    styles.add(ParagraphStyle(
         "SectionHeading",
-        fontName="Times-Bold",
-        fontSize=11.5,
+        fontName="Georgia-Bold",
+        fontSize=11,
         leading=15,
         alignment=TA_CENTER,
         textColor="#222222"
     ))
     styles.add(ParagraphStyle(
         "SubSectionHeading",
-        fontName="Times-Bold",
-        fontSize=10.5,
-        leading=14,
+        fontName="Georgia-Bold",
+        fontSize=10,
+        leading=13,
         alignment=TA_LEFT,
         textColor="#222222"
     ))
     styles.add(ParagraphStyle(
         "SceneDivider",
-        fontName="Times-Roman",
+        fontName="Georgia",
         fontSize=9,
         leading=12,
         alignment=TA_CENTER,
@@ -300,32 +319,32 @@ def build_pdf():
     ))
     styles.add(ParagraphStyle(
         "BlockQuote",
-        fontName="Times-Italic",
-        fontSize=10,
-        leading=14,
+        fontName="Georgia-Italic",
+        fontSize=9.5,
+        leading=13.5,
         alignment=TA_JUSTIFY,
-        leftIndent=24,
-        rightIndent=24
+        leftIndent=20,
+        rightIndent=20
     ))
     styles.add(ParagraphStyle(
         "BulletText",
-        fontName="Times-Roman",
-        fontSize=10,
-        leading=14,
+        fontName="Georgia",
+        fontSize=9.5,
+        leading=13.5,
         leftIndent=14,
         firstLineIndent=-10,
         alignment=TA_LEFT
     ))
     styles.add(ParagraphStyle(
         "NumberedText",
-        fontName="Times-Roman",
-        fontSize=10,
-        leading=14,
+        fontName="Georgia",
+        fontSize=9.5,
+        leading=13.5,
         leftIndent=16,
         firstLineIndent=-12,
         alignment=TA_LEFT,
-        spaceBefore=3,
-        spaceAfter=3
+        spaceBefore=2,
+        spaceAfter=2
     ))
 
     story = []
@@ -345,7 +364,7 @@ def build_pdf():
     if back_file.exists():
         story.extend(parse_markdown(back_file.read_text(encoding="utf-8"), styles))
 
-    doc.build(story, canvasmaker=KDPBookCanvas)
+    doc.build(story, canvasmaker=EmbeddedKDPCanvas)
     
     file_size_mb = pdf_path.stat().st_size / (1024 * 1024)
     print(f"Successfully generated: {pdf_path} ({file_size_mb:.2f} MB)")
