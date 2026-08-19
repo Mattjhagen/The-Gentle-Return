@@ -221,13 +221,18 @@ def build_hardcover():
     print("   ✓ Hardcover cover generated.")
 
 def build_ebook():
-    print("--> Generating Kindle eBook Front Cover (1600 x 2560)...")
+    print("--> Generating Standalone Front Covers (PDF/JPG/PNG)...")
     art_path = COVER_DIR / "The-Gentle-Return-KDP-book-cover.jpeg"
     if art_path.exists():
-        img = Image.open(art_path).convert("RGB").resize((1600, 2560), Image.Resampling.LANCZOS)
-        img.save(str(OUTPUT_DIR / "the-gentle-return-ebook-cover.jpg"), "JPEG", quality=98)
-        img.save(str(OUTPUT_DIR / "the-gentle-return-ebook-cover.png"), "PNG")
-        print("   ✓ eBook cover generated.")
+        img = Image.open(art_path).convert("RGB")
+        img_ebook = img.resize((1600, 2560), Image.Resampling.LANCZOS)
+        img_ebook.save(str(OUTPUT_DIR / "the-gentle-return-ebook-cover.jpg"), "JPEG", quality=98)
+        img_ebook.save(str(OUTPUT_DIR / "the-gentle-return-ebook-cover.png"), "PNG")
+        img_ebook.save(str(OUTPUT_DIR / "the-gentle-return-ebook-cover.pdf"), "PDF", resolution=DPI)
+
+        img_6x9 = img.resize((1800, 2700), Image.Resampling.LANCZOS)
+        img_6x9.save(str(OUTPUT_DIR / "the-gentle-return-front-cover-6x9.pdf"), "PDF", resolution=DPI)
+        print("   ✓ Standalone eBook and 6x9 front cover PDFs generated.")
 
 if __name__ == "__main__":
     build_paperback()
