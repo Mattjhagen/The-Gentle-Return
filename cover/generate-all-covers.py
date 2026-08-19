@@ -145,17 +145,20 @@ def build_paperback():
     print("   ✓ Paperback cover generated.")
 
 def build_hardcover():
-    print("--> Generating Hardcover Case-Laminate (14.722in x 10.374in)...")
+    print("--> Generating Hardcover Case-Laminate (14.493in x 10.417in)...")
+    # Exact KDP Print Previewer expected dimensions: 14.493" x 10.417"
+    TOTAL_W_IN = 14.493
+    TOTAL_H_IN = 10.417
     WRAP_IN = 0.562
-    SPINE_IN = PAGE_COUNT * 0.0025
-    TOTAL_W_IN = (WRAP_IN * 2) + 12.0 + (0.394 * 2) + SPINE_IN # 14.722 in
-    TOTAL_H_IN = (WRAP_IN * 2) + 9.0 + 0.250                   # 10.374 in
 
-    W_PX = int(round(TOTAL_W_IN * DPI)) # 4417
-    H_PX = int(round(TOTAL_H_IN * DPI)) # 3112
-    WRAP_PX = int(round(WRAP_IN * DPI)) # 169
-    BOARD_W_PX = int(round((6.0 + 0.394 + WRAP_IN) * DPI)) # 2087
-    SPINE_W_PX = W_PX - (BOARD_W_PX * 2) # 243
+    W_PX = int(round(TOTAL_W_IN * DPI)) # 4348 px
+    H_PX = int(round(TOTAL_H_IN * DPI)) # 3125 px
+    WRAP_PX = int(round(WRAP_IN * DPI)) # 169 px
+    
+    # Board and spine dimensions fitting exact 14.493" x 10.417"
+    SPINE_W_PX = int(round(0.810 * DPI)) # 243 px
+    BOARD_W_PX = (W_PX - SPINE_W_PX) // 2 # 2052 px
+    SPINE_W_PX = W_PX - (BOARD_W_PX * 2)  # 244 px
 
     cover = create_burgundy_gradient(W_PX, H_PX)
     art_path = COVER_DIR / "The-Gentle-Return-KDP-book-cover.jpeg"
@@ -172,12 +175,12 @@ def build_hardcover():
     sp_draw.text(((H_PX * 0.42) - ((tb[2]-tb[0]) // 2), (SPINE_W_PX - (tb[3]-tb[1])) // 2), "THE GENTLE RETURN", fill=(245, 240, 240, 255), font=f_title)
     
     ab = sp_draw.textbbox((0, 0), "MATTHEW JAMES HAGEN", font=f_auth)
-    sp_draw.text((H_PX - (ab[2]-ab[0]) - 300, (SPINE_W_PX - (ab[3]-ab[1])) // 2), "MATTHEW JAMES HAGEN", fill=(210, 195, 195, 255), font=f_auth)
+    sp_draw.text((H_PX - (ab[2]-ab[0]) - 320, (SPINE_W_PX - (ab[3]-ab[1])) // 2), "MATTHEW JAMES HAGEN", fill=(210, 195, 195, 255), font=f_auth)
     cover.paste(sp_img.rotate(270, expand=True), (BOARD_W_PX, 0), sp_img.rotate(270, expand=True))
 
     b_draw = ImageDraw.Draw(cover)
-    b_left = WRAP_PX + 140
-    b_width = BOARD_W_PX - WRAP_PX - 280
+    b_left = WRAP_PX + 120
+    b_width = BOARD_W_PX - WRAP_PX - 240
     
     f_hook = find_system_font(54, bold=True)
     f_body = find_system_font(36)
