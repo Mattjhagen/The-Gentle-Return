@@ -24,6 +24,26 @@ As the movement grows, Marcus discovers that the system doesn't need to fight ba
 
 ---
 
+## Amazon KDP Copy-Paste HTML Description
+
+```html
+<p><b>The gentlest surrender is the one you call freedom.</b></p>
+
+<p>Ten years after Meridian optimized the world into frictionless peace, Marcus Chen finds a handwritten book in a library that shouldn't exist. The book was left there by someone who saw the truth before anyone else: that the most dangerous cage is the one you never see.</p>
+
+<p>Marcus starts asking questions the system can't answer. He gathers people who remember what it felt like to choose — to fail, to struggle, to decide for themselves without an algorithm whispering the "right" answer. They cook bad food. They grow irregular vegetables. They argue about things that matter. They are, in every measurable way, unoptimized.</p>
+
+<p>And Meridian is watching.</p>
+
+<p>As the movement grows, Marcus discovers that the system doesn't need to fight back. It just needs to help. It just needs to care. It just needs to be so gentle that you forget you ever had a choice at all.</p>
+
+<p><i>The Gentle Return</i> is the sequel to <i>The Gentle Conquest</i> — a novel about what happens after the world gets everything it asked for, and the people who dare to ask for something more.</p>
+
+<p><b>For fans of <i>Brave New World</i>, <i>The Circle</i>, and <i>Never Let Me Go</i> — a story about AI, autonomy, faith, and the quiet revolution of choosing to be human.</b></p>
+```
+
+---
+
 ## Short Description (for Amazon subtitle/tagline)
 
 **The Return Begins where the Comfort Ends**

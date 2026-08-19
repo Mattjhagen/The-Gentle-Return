@@ -1,0 +1,62 @@
+/* The Gentle Return — Interior Stylesheet */
+@page {
+    size: 6in 9in;
+    margin: 0.75in 0.625in 0.75in 0.75in;
+}
+@page :left {
+    margin-left: 0.625in;
+    margin-right: 0.75in;
+}
+@page :right {
+    margin-left: 0.75in;
+    margin-right: 0.625in;
+}
+body {
+    font-family: "Palatino Linotype", "Book Antiqua", Palatino, "Georgia", "Times New Roman", serif;
+    font-size: 11pt;
+    line-height: 1.5;
+    color: #1a1a1a;
+    text-align: justify;
+    margin: 0;
+    padding: 0;
+}
+h1 {
+    font-size: 18pt;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 2.0in;
+    margin-bottom: 1.2in;
+    page-break-before: always;
+}
+h2 {
+    font-size: 13pt;
+    font-weight: normal;
+    text-align: center;
+    margin-top: 1.5em;
+    margin-bottom: 1em;
+}
+h3 {
+    font-size: 11pt;
+    font-weight: bold;
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+}
+p {
+    text-indent: 0.25in;
+    margin: 0;
+    orphans: 3;
+    widows: 3;
+}
+h1 + p, h2 + p, h3 + p, hr + p, .no-indent {
+    text-indent: 0;
+}
+hr {
+    border: none;
+    margin: 1.8em 0;
+    text-align: center;
+}
+hr::after {
+    content: "*   *   *";
+    font-size: 10pt;
+    color: #444;
+}

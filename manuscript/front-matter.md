@@ -14,7 +14,12 @@
 
 Copyright © 2026 Matthew James Hagen
 
-All rights reserved. No part of this publication may be reproduced, distributed, or transmitted in any form or by any means without the prior written permission of the publisher.
+All rights reserved. No part of this publication may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of the publisher, except in the case of brief quotations embodied in critical reviews and certain other noncommercial uses permitted by copyright law.
+
+Publisher: Independent
+Published in the United States of America
+Paperback ISBN: [To be assigned]
+eBook ASIN: [To be assigned]
 
 ---
 
@@ -31,6 +36,8 @@ All rights reserved. No part of this publication may be reproduced, distributed,
 ---
 
 ## Table of Contents
+
+### Prologue: The First Page
 
 ### Part One: The Book
 - Chapter 1: The Reader
