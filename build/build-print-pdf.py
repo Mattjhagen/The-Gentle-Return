@@ -57,6 +57,7 @@ USABLE_HEIGHT = PAGE_HEIGHT - MARGIN_TOP - MARGIN_BOTTOM # 7.25 inch
 
 class EmbeddedKDPCanvas(canvas.Canvas):
     def __init__(self, *args, **kwargs):
+        kwargs['initialFontName'] = "Georgia"
         super().__init__(*args, **kwargs)
         self._saved_page_states = []
 
