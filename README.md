@@ -1,6 +1,8 @@
 # The Gentle Return
 
 > **The Return Begins where the Comfort Ends**
+> **Release Date:** November 16, 2026
+> **Website:** [thegentlecon.quest](https://thegentlecon.quest#return)
 
 The official manuscript, cover assets, build pipeline, and Amazon KDP publishing package for *The Gentle Return* (The Gentle Conquest Series, Book 2) by Matthew James Hagen.
 

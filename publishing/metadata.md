@@ -12,7 +12,7 @@
 ## Publication Details
 
 - **Publisher:** Independent (self-published)
-- **Publication Date:** 2026
+- **Publication Date:** November 16, 2026
 - **Language:** English
 - **Page Count:** ~350 pages (in 6" x 9" trim)
 - **Word Count:** ~110,200 words
