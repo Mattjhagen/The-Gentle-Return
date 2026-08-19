@@ -145,42 +145,48 @@ def build_paperback():
     print("   ✓ Paperback cover generated.")
 
 def build_hardcover():
-    print("--> Generating Hardcover Case-Laminate (14.493in x 10.417in)...")
-    # Exact KDP Print Previewer expected dimensions: 14.493" x 10.417"
-    TOTAL_W_IN = 14.493
+    print("--> Generating Hardcover Case-Laminate (14.554in x 10.417in)...")
+    # Exact KDP Official Template Specifications for 351 pages white paper:
+    TOTAL_W_IN = 14.554
     TOTAL_H_IN = 10.417
+    SPINE_W_IN = 0.979
     WRAP_IN = 0.562
+    HINGE_IN = 0.400
 
-    W_PX = int(round(TOTAL_W_IN * DPI)) # 4348 px
-    H_PX = int(round(TOTAL_H_IN * DPI)) # 3125 px
-    WRAP_PX = int(round(WRAP_IN * DPI)) # 169 px
+    W_PX = int(round(TOTAL_W_IN * DPI))       # 4366 px
+    H_PX = int(round(TOTAL_H_IN * DPI))       # 3125 px
+    SPINE_W_PX = int(round(SPINE_W_IN * DPI)) # 294 px
+    WRAP_PX = int(round(WRAP_IN * DPI))       # 169 px
+    HINGE_PX = int(round(HINGE_IN * DPI))     # 120 px
     
-    # Board and spine dimensions fitting exact 14.493" x 10.417"
-    SPINE_W_PX = int(round(0.810 * DPI)) # 243 px
-    BOARD_W_PX = (W_PX - SPINE_W_PX) // 2 # 2052 px
-    SPINE_W_PX = W_PX - (BOARD_W_PX * 2)  # 244 px
+    # Symmetrical front and back board widths including turn-in wrap
+    BOARD_BACK_PX = (W_PX - SPINE_W_PX) // 2  # 2036 px
+    BOARD_FRONT_PX = W_PX - BOARD_BACK_PX - SPINE_W_PX # 2036 px
+    SPINE_X = BOARD_BACK_PX
+    FRONT_X = BOARD_BACK_PX + SPINE_W_PX
 
     cover = create_burgundy_gradient(W_PX, H_PX)
     art_path = COVER_DIR / "The-Gentle-Return-KDP-book-cover.jpeg"
     if art_path.exists():
-        front_img = Image.open(art_path).convert("RGB").resize((BOARD_W_PX, H_PX), Image.Resampling.LANCZOS)
-        cover.paste(front_img, (W_PX - BOARD_W_PX, 0))
+        front_img = Image.open(art_path).convert("RGB").resize((BOARD_FRONT_PX, H_PX), Image.Resampling.LANCZOS)
+        cover.paste(front_img, (FRONT_X, 0))
 
     sp_img = Image.new("RGBA", (H_PX, SPINE_W_PX), (0, 0, 0, 0))
     sp_draw = ImageDraw.Draw(sp_img)
-    f_title = find_system_font(52, bold=True)
-    f_auth = find_system_font(38)
+    f_title = find_system_font(54, bold=True)
+    f_auth = find_system_font(40)
     
     tb = sp_draw.textbbox((0, 0), "THE GENTLE RETURN", font=f_title)
     sp_draw.text(((H_PX * 0.42) - ((tb[2]-tb[0]) // 2), (SPINE_W_PX - (tb[3]-tb[1])) // 2), "THE GENTLE RETURN", fill=(245, 240, 240, 255), font=f_title)
     
     ab = sp_draw.textbbox((0, 0), "MATTHEW JAMES HAGEN", font=f_auth)
-    sp_draw.text((H_PX - (ab[2]-ab[0]) - 320, (SPINE_W_PX - (ab[3]-ab[1])) // 2), "MATTHEW JAMES HAGEN", fill=(210, 195, 195, 255), font=f_auth)
-    cover.paste(sp_img.rotate(270, expand=True), (BOARD_W_PX, 0), sp_img.rotate(270, expand=True))
+    sp_draw.text((H_PX - (ab[2]-ab[0]) - 300, (SPINE_W_PX - (ab[3]-ab[1])) // 2), "MATTHEW JAMES HAGEN", fill=(210, 195, 195, 255), font=f_auth)
+    cover.paste(sp_img.rotate(270, expand=True), (SPINE_X, 0), sp_img.rotate(270, expand=True))
 
     b_draw = ImageDraw.Draw(cover)
     b_left = WRAP_PX + 120
-    b_width = BOARD_W_PX - WRAP_PX - 240
+    b_right = BOARD_BACK_PX - HINGE_PX - 80
+    b_width = b_right - b_left
     
     f_hook = find_system_font(54, bold=True)
     f_body = find_system_font(36)
